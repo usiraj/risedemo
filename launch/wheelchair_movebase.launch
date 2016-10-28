@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="robot_name" default="risewheelchair" />
+    <!-- Move Base -->
+    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen" ns="/Robots/$(arg robot_name)">
+		<remap from="cmd_vel" to="/cmd_vel" />
+		<!--remap from="odom" to="slam_odom" /-->
+		<remap from="odom" to="svodom" />
+		<rosparam file="$(find risedemo)/params/risewheelchair/costmap_common.yaml" command="load" ns="global_costmap" />
+		<rosparam file="$(find risedemo)/params/risewheelchair/costmap_common.yaml" command="load" ns="local_costmap" />
+		<rosparam file="$(find risedemo)/params/risewheelchair/costmap_global.yaml" command="load" />
+		<rosparam file="$(find risedemo)/params/risewheelchair/costmap_local.yaml" command="load" />
+		<rosparam file="$(find risedemo)/params/risewheelchair/base_planner.yaml" command="load" />
+	</node>    
+</launch>

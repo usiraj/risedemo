@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="robot_name" default="risewheelchair" />
+    
+    <include file="$(find risedemo)/launch/wheelchair_odom.launch" >
+	    <arg name="robot_name" value="$(arg robot_name)" />
+	</include>
+    <node name="slam_gmapping" pkg="gmapping" type="slam_gmapping" ns="/Robots/$(arg robot_name)" output="log">
+		<remap from="scan" to="/Robot/risewheelchair/laserscan" />
+		<param name="map_frame" type="string" value="/$(arg robot_name)/map" />
+		<param name="odom_frame" type="string" value="/$(arg robot_name)/svodom" />
+		<param name="base_frame" type="string" value="/$(arg robot_name)/base_link" />
+		<param name="xmin" value="-10" />
+		<param name="ymin" value="-10" />
+		<param name="xmax" value="10" />
+		<param name="ymax" value="10" />
+		<!-- Other Params -->
+		<param name="map_update_interval" value="0.05" />
+		<param name="particles" value="200" />
+		<param name="linearUpdate" value="0.1" />
+		<param name="angularUpdate" value="0.5" />
+	</node>
+	<!-- Repub odom -->
+	<node name="rebpubodom" pkg="risedemo" type="repubodom.py" ns="/Robots/$(arg robot_name)" output="screen">
+        <remap from="odom" to="svodom" />
+        <remap from="odom2" to="slam_odom" />
+        <param name="base_frame" value="$(arg robot_name)/base_link" />
+        <param name="map_frame" value="$(arg robot_name)/map" />
+    </node>
+</launch>

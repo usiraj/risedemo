@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="robot_name" default="p3at" />
+    <arg name="rviz_config" default="$(find risedemo)/rviz/p3at_gmapping.rviz" />
+    <!-- Robot Simulation -->
+    <include file="$(find riserobotdb)/launch/sims/p3at_mobileranger_sim.launch" ns="$(arg robot_name)">
+		<arg name="rviz_config" value="$(arg rviz_config)" />
+		<arg name="robot_name" value="$(arg robot_name)" />
+		<arg name="gazebo_gui" default="false" />
+		<arg name="gazebo_world" default="$(find riserobotdb)/worlds/indoor_basic_01.world" />
+	</include>
+	<!-- Gmapping -->
+	<node name="slam_gmapping" pkg="gmapping" type="slam_gmapping" ns="/Robots/$(arg robot_name)" output="log">
+		<remap from="scan" to="lms200_laserscan_0" />
+		<param name="map_frame" type="string" value="/$(arg robot_name)/map" />
+		<param name="odom_frame" type="string" value="$(arg robot_name)/odom" />
+		<param name="base_frame" type="string" value="$(arg robot_name)/base_link" />
+		<param name="xmin" value="-10" />
+		<param name="ymin" value="-10" />
+		<param name="xmax" value="10" />
+		<param name="ymax" value="10" />
+		<!-- Other Params -->
+		<param name="map_update_interval" value="0.5" />
+	</node>
+	<!-- Repub odom -->
+	<node name="rebpubodom" pkg="risesgslam" type="repubodom.py" ns="/Robots/$(arg robot_name)" output="screen">
+        <remap from="odom" to="odom" />
+        <remap from="odom2" to="slam_odom" />
+        <param name="base_frame" value="$(arg robot_name)/base_link" />
+        <param name="map_frame" value="$(arg robot_name)/map" />
+    </node>
+    <!-- Move Base -->
+    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen" ns="/Robots/$(arg robot_name)">
+		<remap from="cmd_vel" to="cmd_vel" />
+		<remap from="odom" to="slam_odom" />
+		<rosparam file="$(find risedemo)/params/p3at/costmap_common.yaml" command="load" ns="global_costmap" />
+		<rosparam file="$(find risedemo)/params/p3at/costmap_common.yaml" command="load" ns="local_costmap" />
+		<rosparam file="$(find risedemo)/params/p3at/costmap_global.yaml" command="load" />
+		<rosparam file="$(find risedemo)/params/p3at/costmap_local.yaml" command="load" />
+		<rosparam file="$(find risedemo)/params/p3at/base_planner.yaml" command="load" />
+	</node>
+    
+    
+</launch>

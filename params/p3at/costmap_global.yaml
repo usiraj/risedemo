@@ -1,0 +1,10 @@
+global_costmap:
+ global_frame: p3at/map
+ rolling_window: false
+ track_unknown_space: true
+ width: 25.0
+ height: 25.0
+ resolution: 0.05
+ plugins:
+  - {name: static,                    type: "costmap_2d::StaticLayer"}
+  - {name: inflation,                 type: "costmap_2d::InflationLayer"}

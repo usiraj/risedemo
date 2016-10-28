@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="topic" default="/cmd_vel" />
+    <arg name="rate" default="40" />
+    <arg name="linear" default="0.0" />
+    <arg name="angular" default="0.4" />
+    <node name="publish_cmdvel" pkg="rostopic" type="rostopic" args="pub -r $(arg rate) $(arg topic) geometry_msgs/Twist -- '[$(arg linear), 0, 0]' '[0, 0, $(arg angular)]'" />
+</launch>

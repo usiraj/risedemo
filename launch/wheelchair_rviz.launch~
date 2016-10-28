@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="robot_name" default="risewheelchair" />
+    <arg name="rviz_config" default="$(find risedemo)/rviz/wheelchair_rviz.rviz" />
+    
+    <!--arg name="stereo" default="/Robots/risewheelchair/mobileranger/stereo" />
+    <arg name="campoints" default="/Robots/risewheelchair/campoints" />
+    
+    <arg name="odom" default="/Robots/risewheelchair/svodom" />
+    <arg name="spkf_optim" default="true" />
+    <arg name="ransac_enable" default="true" />
+    <arg name="base_frame" default="base_link" />
+    <arg name="world_frame" default="risewheelchair/svodom" />
+    <arg name="camframe" default="camframe" />  
+    
+    <node name="stereoodom" pkg="RiseStereoOdom" type="stereoodom" output="screen" ns="Robots/risewheelchair">
+        <remap from="campoints" to="$(arg campoints)" />
+        <remap from="odom" to="$(arg odom)" />                       
+        <param name="nframes" value="3" type="int" />     
+        <param name="spkf_optim" value="$(arg spkf_optim)" type="bool" /> 
+        <param name="ransac_enable" value="$(arg ransac_enable)" type="bool" /> 
+        <param name="base2cam_x" value="0.8081" type="double" />
+        <param name="base2cam_y" value="0.02922" type="double" />
+        <param name="base2cam_z" value="0.37" type="double" />
+        <param name="base2cam_angx" value="-1.57079632679" type="double" />
+        <param name="base2cam_angy" value="0." type="double" />
+        <param name="base2cam_angz" value="-1.57079632679" type="double" />
+        <param name="camframe" value="$(arg robot_name)/camframe" type="str" />
+        <param name="baseframe" value="$(arg robot_name)/$(arg base_frame)" type="str" />
+        <param name="worldframe" value="$(arg world_frame)" type="str" />
+        <param name="spkf_alpha" value="0.005" type="double" />
+        <param name="spkf_beta" value="2.0" type="double" />
+        <param name="spkf_k" value="0.0" type="double" />
+        <param name="spkf_cov_Q_pos" value="1E-9" type="double" />
+        <param name="spkf_cov_Q_ang" value="1E-9" type="double" />
+        <param name="spkf_cov_Q_axis" value="1E-9" type="double" />
+        <param name="spkf_cov_Q_vellin" value="1E-9" type="double" />
+        <param name="spkf_cov_Q_velang" value="1E-9" type="double" />
+        <param name="spkf_cov_R_vellin" value="1E-10" type="double" />
+        <param name="spkf_cov_R_velang" value="1E-10" type="double" />
+        <param name="match_lowe" value="0.65" type="double" />
+        <param name="match_radius" value="400" type="double" />
+        <param name="freak_threshold" value="128" type="int" />
+        <param name="ransac_confidence" value="0.995" type="double" />
+        <param name="ransac_outliers" value="0.8" type="double" /> 
+        <param name="ransac_reprojerror" value="4.0" type="double" />
+        <param name="save_enable" value="false" type="bool" />
+        <param name="save_pose" value="processed_files.txt" type="str" />       
+    </node--> 
+    
+    
+    
+    <!--node name="sgslam" pkg="risesgslam" type="sgslam" output="log" ns="/Robots/$(arg robot_name)" >
+        <remap from="campoints" to="$(arg campoints)" />
+        <remap from="odom" to="$(arg odom)" />
+        <remap from="pointsmap3d" to="$(arg pointsmap3d)" />
+        <!- - basic settings - ->
+        <param name="nframes" value="3" type="int" />
+        <param name="graph_optim" value="false" type="bool" />
+        <param name="loop_optim" value="$(arg loop_close)" type="bool" />
+        <param name="spkf_optim" value="$(arg motion_model)" type="bool" />
+        <param name="save_enable" value="true" type="bool" />
+        <!- - base 2 camera transform - ->
+        <param name="base2cam_x" value="0.8081" type="double" />
+        <param name="base2cam_y" value="0.02922" type="double" />
+        <param name="base2cam_z" value="0.37" type="double" />    <!- - 0.1925 + laser range finder - ->
+        <param name="base2cam_angx" value="-1.57079632679" type="double" />
+        <param name="base2cam_angy" value="0." type="double" />
+        <param name="base2cam_angz" value="-1.57079632679" type="double" />
+        <param name="camframe" value="camframe" type="str" />
+        <param name="baseframe" value="$(arg base_frame)" type="str" />
+        <param name="worldframe" value="$(arg world_frame)" type="str" />
+        <!- - settings for ransac - ->
+        <param name="ransac_confidence" value="0.995" type="double" />
+        <param name="ransac_outliers" value="0.6" type="double" />
+        <param name="ransac_reprojerror" value="0.8" type="double" />
+        <!- - settings for spkf - ->
+        <param name="spkf_alpha" value="0.0005" type="double" />
+        <param name="spkf_beta" value="2.0" type="double" />
+        <param name="spkf_k" value="0.0" type="double" />
+        <param name="spkf_cov_Q_pos" value="0.0000001" type="double" />
+        <param name="spkf_cov_Q_ang" value="0.0000001" type="double" />
+        <param name="spkf_cov_Q_axis" value="0.0000001" type="double" />
+        <param name="spkf_cov_Q_vellin" value="0.0000001" type="double" />
+        <param name="spkf_cov_Q_velang" value="0.0000001" type="double" />
+        <param name="spkf_cov_R_vellin" value="0.0000000001" type="double" />
+        <param name="spkf_cov_R_velang" value="0.0000000001" type="double" />
+        <!- - settings for graph optimization and loop closure - ->
+        <param name="graph_iters" value="25" type="int" />
+        <param name="vlmarks_baseid" value="1000000" type="int" />
+        <param name="kf_minpoints" value="20" type="int" />
+        <param name="kf_minframes" value="10" type="int" />
+        <param name="kf_mintrans" value="0.5" type="double" />
+        <param name="kf_minrotation" value="1.57079632679" type="double" />
+        <param name="kf_minscore" value="0.7" type="double" />
+        <param name="loopclose_dist" value="1.0"  type="double" />
+        <param name="vocabulary" value="$(arg vocabulary_file)" type="str" />        
+        <!- - files to save to - ->
+        <param name="save_pose" value="$(find risesgslam)/diagnostics/lab_pose.txt" type="str" />
+        <param name="save_extra" value="$(find risesgslam)/diagnostics/lab_extra.txt" type="str" />
+        <param name="save_densemap" value="$(find risesgslam)/diagnostics/lab.densemap" type="str" />
+        <param name="save_landmarks" value="$(find risesgslam)/diagnostics/lab.landmarks" type="str" />
+        <param name="save_g2o" value="$(find risesgslam)/diagnostics/lab.g2o" type="str" />
+        <param name="save_dictionary" value="$(find risesgslam)/diagnostics/lab_dictionary.yml.gz" type="str" />   
+        <!- - marker size - ->
+        <param name="marker3dscale" value="0.01" type="double" /> 
+    </node-->
+    <!-- now launch rviz -->
+	    <!-- Robot Model -->
+    <include file="$(find riserobotdb)/launch/real/risewheelchair.launch" ns="$(arg robot_name)" output="log">
+		<arg name="rviz_config" value="$(arg rviz_config)" />
+		<arg name="robot_name" value="$(arg robot_name)" />
+	</include>
+	
+</launch>
